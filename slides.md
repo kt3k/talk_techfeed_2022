@@ -6,23 +6,41 @@ Deno の最近の動向 2022
 
 ---
 class: middle, center
+資金調達 - 6月
 
-$21M 調達する Deno
-
----
-class: middle, center
-
-Bun の登場に驚く Deno
+$21M 調達
 
 ---
 class: middle, center
 
-NPM 互換になる Deno
+Bun の登場 - 7月
+
+---
+class: middle, center
+
+NPM 互換性リリース - 8月
+
+---
+class: middle, center
+
+Deno Offsite - 10月
 
 ---
 class: middle, center
 
 イベントが盛りだくさんだった 2022
+
+---
+class: middle, center
+
+2022 の Deno の変化のキーとなったブログポスト
+
+---
+class: center middle
+
+[Big Changes Ahead for Deno](https://deno.com/blog/changes) - 8月
+
+<img src="./assets/big-changes.jpg" align="center" width="700" />
 
 ---
 
@@ -32,17 +50,16 @@ class: middle, center
 
 日野澤歓也 twitter @kt3k
 
-<small>Deno Land, ソフトウェアエンジニア (2021 - 現在)</small>
+- <small>Web エンジニア (2009 - 現在)</small>
+- <small>Deno Land, ソフトウェアエンジニア (2021 - 現在)</small>
 
-<small>2018年から OSS である Deno にコントリビュート。2020年作者に誘われ Deno Land に転職。現在はフルタイムで Deno と Deno Deploy を開発中</small>
-
-<small>それ以前は Web エンジニア (主にフロントエンド) を 10年ぐらいしていました</small>
+<small>2018年(プロジェクト初期)から OSS である Deno にコントリビュート。2020年作者に誘われ Deno Land に転職。現在はフルタイムで Deno と Deno Deploy を開発中</small>
 
 ---
 本日のアジェンダ
 
-- Deno の特徴のおさらい
-- 2022 の Deno Big Changes
+- Deno のおさらい
+- Big Changes in 2022
 
 ---
 class: middle center
@@ -50,510 +67,130 @@ class: middle center
 Deno とは
 
 ---
-class: inverse middle center
-
-今から3年半前
-
----
-class: inverse middle center
-
-とあるカンファレンス
-
----
-class: jsconfeu2018
-
-JSConf EU 2018
-
----
-「Node.js について後悔している10の事」
-
-- Node.js の作者 Ryan Dahl が Node.js の現状のデザインについて、今の視点からみて後悔している事を発表
-- それを克服する新しい処理系として Deno プロジェクトを提案
-
-<p style="text-align: center">
-  <img src="assets/jsconfeu2018-2.jpg" width="400" />
-</p>
-
----
-Node.js のおさらい
-
-- サーバーサイド JavaScript
-- V8 エンジンベース
-- 2009年に開発開始
-- C10K 問題への解としてサーバーサイドで流行
-
---
-- フロントエンド開発の基盤にもなった
-
---
-- Electron などのデスクトップアプリの基盤 (Slack, VSCode)
-
---
-- React Native などモバイルアプリ機能も充実
-
---
-
-=> あらゆる場面で活用される巨大プラットフォーム
-
----
-Node.js 7つの後悔
-
-- 後悔1: Promise を使わなかった
-- 後悔2: Security Sandbox を活用しなかった
-- 後悔3: GYP を使い続けてしまった
-- 後悔4: package.json
-- 後悔5: node_modules
-- 後悔6: モジュール解決時の拡張子省略
-- 後悔7: index.js
---
-
-
-Node.js の「あたりまえ」を否定
-
----
-対案としての Deno 、そのゴール
-
-1. セキュリティの強化
-2. ES Module だけを使う
-3. TypeScript ビルトイン
-4. 単体の実行ファイルで動く
-5. モダンな開発環境を使う
-6. 可能な限りブラウザ互換にする
-
-などの目標が掲げられた
-
----
 class: middle center
 
-Deno とは
---
-
-
-"改良版" Node.js
+DX (開発体験) にフォーカスした<br />JavaScript runtime
 
 ---
-class: middle center
+DX にフォーカスした JavaScript runtime
 
-<img src="./assets/node-sort-deno-tweet.png" align="center" width="700" />
-
----
-class: middle center
-Deno の特徴
-
----
-Deno の特徴
-- ブラウザ互換性
-- TypeScript サポート
-- サンドボックスセキュリティ
 - ビルトイン開発ツール
+  - `deno lint`
+  - `deno fmt`
+  - `deno test`, etc
+
+cf. `prettier` `eslint` `jest` `vitest`
 
 ---
-class: inverse middle center
-
-ブラウザ互換性
-
----
-ブラウザ互換性
-
-- Deno には可能な限りブラウザ互換 API を取り入れるというデザイン方針がある
-- Node の開発が始まった時に比べてかなり多くのブラウザ API が定義されていて、いろいろな事がブラウザと同じ API で出来るようになっている
---
-
-- <small>ただし、Node.js も可能な場合は後からブラウザ互換 API を取り入れるという流れがあり、ややこしい状態になっている</small>
-  - 例. url と URL、Buffer extends Uint8Array
+DX にフォーカスした JavaScript runtime
+- TypeScript ビルトイン
+  - 設定不要、インストール不要
 
 ---
-Deno に実装されている ブラウザ互換API の例
-
-`fetch` API
-
-```ts
-const resp = await fetch("https://example.com");
-const html = await resp.text();
-console.log(html);
-```
-
---
-
-- 簡単に HTTP リクエストが出来る
-- http client library などが不要
-
----
-Deno に実装されている ブラウザ互換API の例
-
-バイナリ処理 - TypedArray API (Uint8Array, etc)
-
-```ts
-const data = Uint8Array.from([0x66, 0x6f, 0x6f]);
-const text = new TextDecoder().decode(data);
-// => foo
-```
-
---
-- <small>Node の場合は `Buffer` (独自クラス)</small>
-- <small>ただし今は Node は TypedArray も持っている</small>
-
----
-Deno に実装されている ブラウザ互換API の例
-
-URL パーサー
-
-```ts
-const url = new URL("https://example.com/?foo=bar");
-console.log(url.hostname); // => example.com
-console.log(url.searchParams.get("foo")); // => bar
-```
-
---
-- <small>Node の場合は require("url") が昔からあるが、後に URL も実装されて両方ある状態</small>
-
----
-Deno に実装されている ブラウザ互換API の例
-
-Web Storage
-
-```ts
-localStorage.setItem("key", data);
-...
-// プログラム再起動後
-console.log(localStorage.getItem("key"));
-// => さっき保存したデータが残っている
-```
-
---
-- エントリポイント毎に独立したストレージを持てる
-- 内部では SQLite を使って保存している
-
---
-- <small>Node には無い機能</small>
-
----
-Deno に実装されている ブラウザ互換API の例
-
-HTTP imports
-
-```ts
-import { serve }
-  from "https://deno.land/std@0.126.0/http/server.ts";
-
-serve((_req) => new Response("Hello, world"));
-```
-
---
-- URL 指定でモジュールを取得できる。
-- この機能があるため Deno では `package.json` や `node_modules` が不要になっている
-
---
-- <small>Node でも最近実験的な実装が始まったが物議を醸している</small>
-
----
-Deno に実装されているブラウザAPI の例
-
-- PubSub - EventTarget API
-- ストリーミング処理 - Web Stream API
-- 暗号 - Web Crypto API
-- GPU - WebGPU
-- http server - Request, Response API
-
-参考: [A list of every web API in Deno](https://deno.com/blog/every-web-api-in-deno)
-
----
-ブラウザ互換 API の良いところ
-
-- ブラウザと共通して使えるコードを書ける
-- ブラウザ API はとてもきちんと定義されている
-  - 議論の質が高い
-  - 仕様書の質が高い
-  - 自動テストがある
-- 仕様策定プロセスがあるため、簡単に変わることはない
-
---
-
-=> 安心して使える
-
----
-ブラウザ互換性 - 最近の進捗 - WPT
-
-- 2021年1月 Web Platform テストを CI に導入
-- Web Platform Test = ブラウザが共通で通している Web API のテストスイート
-- コミット毎に Web 互換性をチェックしています
-
-<p class="text-align: center">
-<a href="https://wpt.fyi/results/?label=master&product=chrome%5Bexperimental%5D&product=edge%5Bexperimental%5D&product=firefox%5Bexperimental%5D&product=safari%5Bexperimental%5D&product=deno&aligned">
-<img src="./assets/wpt.png" align="center" width="600" /></a>
-</p>
-
----
-Web 互換性 - 最近の進捗 - MDN
-
-- 2021年8月 MDN への掲載が始まる
-
-<p class="text-align: center">
-  <img src="./assets/mdn.png" width="600" />
-</p>
-
----
-class: inverse middle center
-
-TypeScript サポート
-
----
-TypeScript サポート
-
-- TypeScript をそのまま実行できる
-
-```ts
-// sample.ts
-const res = await fetch("https://example.com")
-console.log(res.body.text);
-```
-
---
-
-```
-$ deno run sample.ts  
-Check file:///Users/kt3k/sample.ts
-error: TS2531 [ERROR]: Object is possibly 'null'.
-console.log(res.body.text);
-            ~~~~~~~~
-```
-
-↑ 実行時エラーではなく型エラー
-
----
-TypeScript サポート `deno lsp`
-
-- Language Server Protocol でエディタと通信して、Deno 固有な型情報の補完が出来るように
-
-<p class="text-align: center">
-  <img src="./assets/deno-vscode.png" width="600" />
-</p>
-
----
-TypeScript サポート `deno lsp`
-
-- ネットワーク越しの TypeScript も型補完が可能
-
-<p class="text-align: center">
-  <img src="./assets/deno-lsp-network.png" width="600" />
-</p>
-
----
-TypeScript サポート 補足
-
-- <small>なお、ベストプラクティスと考えられている設定がデフォルトで入っているので、設定無しで TypeScript を使い始められます。</small>
-- <small>デフォルトから外れたい場合は、自分でコンパイラオプションを書くこともできます。</small>
-
---
-
-=> <small>TypeScript を使うための敷居が Node.js に比べてかなり低い(はず)</small>
-
----
-class: inverse middle center
-
-サンドボックスセキュリティ
-
----
-サンドボックスセキュリティ
-
-前提の話
-
-- Deno は内部的に V8 エンジンを使っている。
-- V8 は「信用できないコード」を動かす事を前提に設計されているため、サンドボックス化されている
-- => V8 の外に影響を及ぼせないようになっている
-
----
-サンドボックスセキュリティ
-
-<p class="text-align: center">
-  <img src="./assets/deno-diagram.svg" width="750" />
-</p>
-
----
-サンドボックスセキュリティ
-
-- V8 Sandbox から出て runtime の機能を使う際に opcallSync / opcallAsync という関数を必ず通るデザインになっている
-- その際に使おうとしてる機能に即したパーミッションを持っているかどうかをチェックする
-
----
-サンドボックスセキュリティ
-
-- 7種類のパーミッションがあり、コマンドライン引数で渡す
-- `--allow-read` ファイル読み取り
-- `--allow-write` ファイル書き込み
-- `--allow-net` ネットワーク
-- `--allow-env` 環境変数読み取り
-- `--allow-run` プロセス実行
-- `--allow-ffi` ネイティブ拡張の使用を許可
-- `--allow-hrtime` 高精度タイマーの使用を許可
-
----
-サンドボックスセキュリティ
-
-ファイルの読み取りを許可する場合 (全部許可)
-```
-deno run --allow-read program.ts
-```
-
-カレントディレクトリのみ読み込み許可
-```
-deno run --allow-read=. program.ts
-```
-
----
-サンドボックスセキュリティ
-
-ファイルの書き込みを許可する場合 (全部許可)
-```
-deno run --allow-write program.ts
-```
-
-`dist/` ディレクトリのみ書き込み許可
-
-```
-deno run --allow-write=dist/ program.ts
-```
-
----
-サンドボックスセキュリティ
-
-<small>ネットワークアクセスを許可する場合 (全部許可)</small>
-```
-deno run --allow-net program.ts
-```
-
-<small>特定のドメイン・ポートのみネットワークアクセス許可</small>
-
-```
-deno run --allow-net=example.com:80 program.ts
-```
-
---
-
-<small>=> 意図しない攻撃コード混入時などに被害を防ぐ事が出来る</small>
-
----
-サンドボックスセキュリティ
-
-その他のパーミッション
-
-- `--allow-env` 環境変数の使用許可
-- `--allow-run` 別プロセス実行の使用許可
-- `--allow-ffi` 外部ネイティブ拡張使用許可 (Deno のセキュリティモデルを無視したコードが実行されるため、使用注意)
-- `--allow-hrtimes` 高精度タイマー使用許可・スペクター対策 (基本許可しない)
-- `--allow-all, -A` 全部許可、開発時などに利用
-
----
-サンドボックスセキュリティ余談
-
-- ところで、npm では恒常的にセキュリティインシデントが起きている
-- その大部分は、Deno の場合はセキュリティフラグを正しく使う事で回避出来る
-- Node.js に今からこの機能を入れる事は現実的ではない
-- Deno が Node.js を本質的に"改善"している機能と言える
+DX にフォーカスした JavaScript runtime
+
+- 整理されたモジュール機構
+- Node, Bun
+  - 🤷 CJS <-> ESM interop
+  - 🤷 `.cjs` `.mjs` `.cts` `.mts`
+  - 🤷 `{ "type": "module|commonjs" }`
+- Deno
+  - ✅ ESM only
+  - ✅ .ts .js
 
 ---
 class: middle center inverse
 
-ビルトイン開発ツール
+<img src="./assets/jsts.jpg" />
 
 ---
-最近の Node.js 開発の始め方
+DX にフォーカスした JavaScript runtime
+
+- サプライチェーン攻撃に対する防御機構
+
+<img src="./assets/perm.png" width="750" />
 
 --
 
-- TypeScript のインストール
---
-
-- ESLint のインストール
---
-
-- Prettier のインストール
---
-
-- Jest のインストール
---
-
-- テストカバレッジツールのインストール 😩
---
-
-- バンドラーのインストール 😫
-
-
---
-
-=> <small>最初からインストールしないといけないものが多い!</small>
-
---
-
-=> <small>しかも時間が経つと「それはもう古い」になりがち!</small>
+<small>内部で V8 のサンドボックス機構を利用している</small><br />
+<small>詳細は公式ドキュメント [Permission ページ](https://deno.land/manual@v1.27.2/basics/permissions) 参照</small>
 
 ---
-Deno のビルトイン開発ツール
+DX にフォーカスした JavaScript runtime
 
-- 開発時に常識的に必要になる機能は本体にビルトインされている
+- Web 互換 API
+  - `fetch()`
+  - TypedArray - `Uint8Array` etc
+  - `prompt()`
 
----
-Deno のビルトイン開発ツール
-
-- 例
 --
 
-  - コードのフォーマット => `deno fmt`
+<br />
+<br />
+<small>ブラウザで使える知識と同じ知識で Deno のコードが書ける</small><br />
+
 --
-
-  - コードのリント => `deno lint`
---
-
-  - ユニットテストの実行 => `deno test`
---
-
-  - テストカバレッジ => `deno coverage`
---
-
-  - スクリプトのバンドル => `deno bundle`
---
-
-  - TypeScript => 本体に内包
---
-
-
-=> Deno 本体さえあれば、開発に必要なツールが一通り揃っている!
+<small>Deno で使える Web API 一覧はブログ記事 [list of every web API](https://deno.com/blog/every-web-api-in-deno) 参照</small>
 
 ---
 class: middle center
 
-Deno のユニークなデザインは<br />一定の評価を受けつつある
+Deno は JS runtime のあるべき姿を模索している
 
 ---
-Deno の採用例 - GitHub
+class: center middle
 
-次世代 Data Access API
+[Big Changes Ahead for Deno](https://deno.com/blog/changes)
 
-<p style="text-align: center">
-  <a href="https://next.github.com/projects/flat-data">
-    <img src="./assets/flat-data.png" width="750" />
-  </a>
-</p>
+<img src="./assets/big-changes.jpg" align="center" width="700" />
 
 ---
-Deno の採用例 - Slack
+Big Changes
 
-<p style="text-align: center">
-  <a href="https://deno.com/blog/slack">
-    <img src="./assets/slack-deno.png" width="600" />
-  </a>
-</p>
+Deno に今後起こる3つの変化
 
----
-Deno の採用例 - Slack
-
-- Slack の新しい SDK は Deno ベース
-- この件以降、各種スタートアップから Deno 社への問い合わせがかなり増えている
+- npm 互換性
+- パフォーマンス向上
+- DX 向上 (主にモジュール検索性)
 
 ---
-まとめ
+class: middle center
 
-- Deno は "改良版" Node.js を目指すプロジェクト
-- Deno は Web 互換性、セキュリティ、TypeScript サポート、ビルトイン開発ツールなどが特徴的でそれらの機能はかなり充実・安定してきている
-- Deno は GitHub、Slack などから採用が始まっている
+npm 互換性
 
+---
+npm 互換性
+
+npm モジュールとの互換性を導入すると宣言 - 8月
+--
+
+- `npm:` specifier の導入
+
+--
+  - Deno v1.25 でリリース
+
+--
+  - Deno v1.28 で安定化
+
+---
+パフォーマンスの向上
+
+- パフォーマンスだけを専門的にやるチームが発足
+- Deno.serve (コードネーム Flash) API が `--unstable` フラグ付きでリリース
+  - 既存の Deno.serveHttp よりも圧倒的に速い
+- Bun の HP に載っている 3つのベンチマークは実は結構変わっている。
+  - 単なる HTTP、単なる FFI では Bun は Deno に勝てなくなってきている
+
+---
+DX 向上
+
+- Deno はモジュールの検索性が悪いという問題があった。
+  - たとえば oak という Deno 界でかなり使われているモジュールがある
+  - Deno レジストリで oak を検索すると何故か 2ページ目に oak 本体が表示されていた
+- 人気順を加味したモジュール検索を実装
+- 更にシンボル検索を実装
+  - Deno 本体、標準モジュール、3rd パーティモジュールのすべての公開 API の中から横断的に機能を検索出来るようになった
+
+---
+
+以上
