@@ -1,1 +1,2 @@
-https://kt3k.github.io/talk_devsumi_2022_deno/
+- Slides https://kt3k.github.io/talk_techfeed_2022
+- Event page https://techfeed.io/events/techfeed-experts-night-8
