@@ -1,6 +1,8 @@
 dest: docs
 port: 30000
-title: Deno の最近の動向
+title: Deno の最近の動向 2022
+description: Deno の基本をおさらいしつつ、2022 年から始まった Deno の変化の3つの軸について話します
+og:image: "https://kt3k.github.io/talk_techfeed_2022/assets/og-image.png"
 remarkConfig:
   slideNumberFormat: 'TechFeed Deno - %current% / %total%'
 css: |

@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "start": "deno run -A --node-modules-dir npm:remarker",
+    "dist": "deno run -A --node-modules-dir npm:remarker build"
+  }
+}

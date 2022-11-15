@@ -1,8 +1,8 @@
 class: middle, center
 
-<img src="./assets/logo.svg" align="center" width="200" />
-
 Deno の最近の動向 2022
+
+<img src="./assets/npm-compat.svg" align="center" width="500" />
 
 ---
 class: middle, center
