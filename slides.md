@@ -94,7 +94,7 @@ class: middle center
 DX (開発体験) にフォーカスした<br />JavaScript runtime
 
 ---
-DX にフォーカスした JavaScript runtime
+Deno の DX
 
 - ビルトイン開発ツール
   - `deno lint`
